@@ -1,0 +1,21 @@
+name: Packaging contracts
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Install RPM tooling
+        run: sudo apt-get update && sudo apt-get install -y rpm gnupg
+      - name: Test repository and packaging contracts
+        run: |
+          python3 -m unittest discover -s tests -v
+          rpmspec -P claude-code-repo.spec >/dev/null

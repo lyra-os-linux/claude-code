@@ -1,0 +1,12 @@
+-------------------------------------------------------------------
+Sun Nov  1 12:00:00 UTC 2026 - Lyra OS Release <rodrigo@lyraos.com.br>
+
+- Register Anthropic's official Claude Code Zypper repository
+  (downloads.claude.ai/claude-code/rpm/stable), with metadata and package GPG
+  verification enabled and third-party priority 90.
+- Ship the Claude Code release signing key
+  (31DD DE24 DDFA B679 F42D 7BD2 BAA9 29FF 1A7E CACE) at
+  /usr/share/claude-code-repo/claude-code.asc, because the repository does not
+  publish repomd.xml.key; %check pins the fingerprint.
+- Ship no Claude Code binary: Claude Code is installed, updated and signed by
+  Anthropic.

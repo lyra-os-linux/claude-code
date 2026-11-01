@@ -1,0 +1,12 @@
+# Domain-specific words missing from this checker's dictionary.
+addFilter("E: spelling-error .* anthropic")
+addFilter("E: spelling-error .* rpm")
+addFilter("E: spelling-error .* repomd")
+addFilter("E: spelling-error .* gpg")
+addFilter("E: spelling-error .* usr")
+addFilter("E: spelling-error .* zypper")
+
+# The RPM changelog lives in claude-code-repo.changes, filled in by OBS from
+# %changelog at release time; the empty %changelog stanza in
+# claude-code-repo.spec is intentional, matching every other Lyra package.
+addFilter("E: no-changelogname-tag")
