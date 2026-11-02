@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Mon Nov  2 12:00:00 UTC 2026 - Lyra OS Release <rodrigo@lyraos.com.br>
+
+- Set Claude Code's update channel to stable through the managed
+  settings drop-in /etc/claude-code/managed-settings.d/lyra-update-channel.json.
+  The repository publishes the stable channel, so the CLI no longer reports
+  "update available" for latest releases that Zypper cannot install yet.
+
+-------------------------------------------------------------------
 Sun Nov  1 12:00:00 UTC 2026 - Lyra OS Release <rodrigo@lyraos.com.br>
 
 - Register Anthropic's official Claude Code Zypper repository

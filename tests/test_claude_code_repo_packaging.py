@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import configparser
+import json
 import shutil
 import subprocess
 import tempfile
@@ -42,6 +43,12 @@ class ClaudeCodeRepoPackagingTests(unittest.TestCase):
                 primary.append(fields[9])
                 after_pub = False
         self.assertEqual(primary, [ANTHROPIC])
+
+    def test_update_channel_matches_repository_channel(self) -> None:
+        settings = json.loads((ROOT / "lyra-update-channel.json").read_text(encoding="utf-8"))
+        self.assertEqual(settings, {"autoUpdatesChannel": "stable"})
+        spec = (ROOT / "claude-code-repo.spec").read_text(encoding="utf-8")
+        self.assertIn("%{_sysconfdir}/claude-code/managed-settings.d/lyra-update-channel.json", spec)
 
     def test_package_ships_no_upstream_binary(self) -> None:
         spec = (ROOT / "claude-code-repo.spec").read_text(encoding="utf-8")
