@@ -18,7 +18,13 @@ Vega (Software → Desenvolvedores → Claude Code) or when Zypper asks.
 - `claude-code.asc`: the Claude Code release signing key,
   `31DD DE24 DDFA B679 F42D 7BD2 BAA9 29FF 1A7E CACE`, from
   `https://downloads.claude.ai/keys/claude-code.asc`;
-- `claude-code-repo.spec`: installs both files, and at build time asserts the
+- `lyra-update-channel.json`: drop-in de managed settings instalado em
+  `/etc/claude-code/managed-settings.d/`, com `autoUpdatesChannel: "stable"`.
+  O repositório RPM publica só o canal `stable`; sem isso o CLI compara com
+  `latest` e avisa "update available" de versões que o Zypper ainda não tem.
+  Por ser managed settings, vale para todos os usuários e não é sobrescrito
+  pelo `~/.claude/settings.json`;
+- `claude-code-repo.spec`: installs these files, and at build time asserts the
   repository settings and the key fingerprint;
 - `claude-code-repo.changes`: RPM changelog.
 

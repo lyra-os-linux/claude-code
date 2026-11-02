@@ -6,6 +6,7 @@ License:        GPL-3.0-or-later
 URL:            https://github.com/lyra-os-linux/claude-code
 Source0:        claude-code.repo
 Source1:        claude-code.asc
+Source2:        lyra-update-channel.json
 BuildArch:      noarch
 BuildRequires:  gpg2
 
@@ -16,7 +17,9 @@ key (31DD DE24 DDFA B679 F42D 7BD2 BAA9 29FF 1A7E CACE). The key is pinned
 in this package because the repository does not publish repomd.xml.key; the
 user still approves it the first time, in Vega or in Zypper. This package
 carries no Claude Code binary: it only makes `zypper install claude-code` resolve
-against Anthropic's own repository.
+against Anthropic's own repository. It also sets Claude Code's update
+channel to `stable`, the channel this repository publishes, so the CLI no
+longer reports `latest` releases that Zypper cannot install yet.
 
 %prep
 
@@ -25,6 +28,7 @@ against Anthropic's own repository.
 %install
 install -D -m 0644 %{SOURCE0} %{buildroot}%{_sysconfdir}/zypp/repos.d/claude-code.repo
 install -D -m 0644 %{SOURCE1} %{buildroot}%{_datadir}/claude-code-repo/claude-code.asc
+install -D -m 0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/claude-code/managed-settings.d/lyra-update-channel.json
 
 %check
 repo=%{buildroot}%{_sysconfdir}/zypp/repos.d/claude-code.repo
@@ -38,6 +42,8 @@ export GNUPGHOME=$(mktemp -d)
 fingerprints=$(gpg --batch --show-keys --with-colons %{buildroot}%{_datadir}/claude-code-repo/claude-code.asc | awk -F: '/^pub/{p=1;next} /^fpr/ && p {print $10; p=0}')
 rm -rf "$GNUPGHOME"
 test "$fingerprints" = "31DDDE24DDFAB679F42D7BD2BAA929FF1A7ECACE"
+# Claude Code must follow the channel this repository publishes.
+grep -qF '"autoUpdatesChannel": "stable"' %{buildroot}%{_sysconfdir}/claude-code/managed-settings.d/lyra-update-channel.json
 
 %files
 %dir %{_sysconfdir}/zypp
@@ -45,5 +51,8 @@ test "$fingerprints" = "31DDDE24DDFAB679F42D7BD2BAA929FF1A7ECACE"
 %config(noreplace) %{_sysconfdir}/zypp/repos.d/claude-code.repo
 %dir %{_datadir}/claude-code-repo
 %{_datadir}/claude-code-repo/claude-code.asc
+%dir %{_sysconfdir}/claude-code
+%dir %{_sysconfdir}/claude-code/managed-settings.d
+%config(noreplace) %{_sysconfdir}/claude-code/managed-settings.d/lyra-update-channel.json
 
 %changelog
